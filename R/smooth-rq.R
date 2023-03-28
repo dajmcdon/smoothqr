@@ -47,10 +47,12 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
   })
   bad_cols <- which(column_sds < 1e-6)
   if (length(bad_cols) > 0L) {
+    nms <- colnames(x)[bad_cols]
+    if (is.null(nms)) nms <- paste("col", bad_cols)
     cli::cli_abort(
       c("Cannot perform smooth quantile regression.",
         i = "Some predictors are nearly constant. Problematic predictors:",
-        i = "{colnames(x)[bad_cols]}."))
+        i = "{nms}."))
   }
 
   original_predictors <- colnames(x) %||% paste0("x", 1:ncol(x))
@@ -105,7 +107,7 @@ coef.smoothrq <- function(object, type = c("response", "smoothed"), ...) {
   nr <- length(object$response_names)
   names_d <- paste0("degree_", seq(object$degree))
   cc <- coef(object$rqfit)
-  names_t <- colnames(cc)
+  names_t <- paste0("tau = ", object$tau)
   nt <- length(names_t)
   nd <- object$degree
   dim(cc) <- c(np, nd, nt)
@@ -114,10 +116,10 @@ coef.smoothrq <- function(object, type = c("response", "smoothed"), ...) {
     cc <- apply(cc, 3, function(x) tcrossprod(x, object$H))
     dim(cc) <- c(np, nr, nt)
     dimnames(cc) <- list(names_p, object$response_names, names_t)
-    cc <- lapply(seq(nr), function(resp) cc[,resp,])
+    cc <- lapply(seq(nr), function(resp) cc[ , resp, ])
     names(cc) <- object$response_names
   } else {
-    cc <- lapply(seq(nd), function(deg) cc[,deg,])
+    cc <- lapply(seq(nd), function(deg) cc[ , deg, ])
     names(cc) <- names_d
   }
   cc
@@ -144,16 +146,22 @@ predict.smoothrq <- function(object, newdata, ...) {
   rlang::check_dots_empty()
   available_predictors <- colnames(newdata) %||% paste0("x", 1:ncol(newdata))
   if (is.null(colnames(newdata))) colnames(newdata) <- available_predictors
-  H <- object$H
-  resp <- object$response_names
-  x <- dplyr::select(
-    as.data.frame(newdata),
-    dplyr::all_of(object$original_predictors)
-  )
-  if (object$intercept) x <- cbind(Intercept = 1, x)
-  x <- as.matrix(x)
+  newdata <- newdata[, available_predictors, drop = FALSE]
+  predictor_set <- object$original_predictors %in% available_predictors
+  if (!all(predictor_set)) {
+    missing_predictors <- object$original_predictors[!predictor_set]
+    cli::cli_abort(
+      c("Some of the original predictors are not present in `newdata`.",
+        i = "Missing {missing_predictors}."))
+  }
+  if (object$intercept) newdata <- cbind(Intercept = 1, newdata)
+  newdata <- as.matrix(newdata)
   cc <- coef(object, type = "response")
-  preds_list <- lapply(cc, function(th) x %*% th)
+  preds_list <- lapply(cc, function(th) {
+    p <- newdata %*% th
+    colnames(p) <- paste("tau =", object$tau)
+    p
+  })
   preds_list
 }
 
