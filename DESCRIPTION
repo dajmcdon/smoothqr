@@ -1,5 +1,5 @@
 Type: Package
-Package: smqr
+Package: smoothqr
 Title: Smooth Multi-period Quantile Regression
 Version: 0.1.0
 Authors@R: c(
