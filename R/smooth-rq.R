@@ -39,7 +39,10 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
       c("The degree of smoothing must be less than the number of responses.",
         i = "Here, `degree` = {degree} with {n_models} responses."))
   } else {
-    H <- stats::poly(aheads, degree = degree, simple = TRUE)
+    H <- matrix(1 / sqrt(length(aheads)), nrow = length(aheads), ncol = 1)
+    if (degree > 1) {
+      H <- cbind(H, stats::poly(aheads, degree = degree - 1, simple = TRUE))
+    }
   }
 
   column_sds <- apply(x, 2, function(z) {
@@ -65,7 +68,7 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
   rownames(dat) <- NULL
   ok <- stats::complete.cases(dat)
   dat <- dat[ok, ]
-  out <- quantreg::rq(Y ~ . - 1, tau = tau, data = dat, ...)
+  out <- quantreg::rq(Y ~ . + 0, tau = tau, data = dat, ...)
   structure(list(
     rqfit = out,
     H = H,
