@@ -30,8 +30,6 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
   arg_is_scalar(intercept, degree)
   arg_is_numeric(aheads)
 
-
-
   n_models <- ncol(y) %||% 1L
   response_names <- colnames(y) %||% paste0("y", 1:n_models)
   y <- as.matrix(y)
