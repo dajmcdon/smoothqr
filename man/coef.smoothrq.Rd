@@ -10,9 +10,9 @@
 \item{object}{an object for which the extraction of model coefficients is
     meaningful.}
 
-\item{type}{The option `response` means that the smoothing will be inverted,
+\item{type}{The option \code{"response"} means that the smoothing will be inverted,
 giving \eqn{\Theta H'}. This will result in a List containing one matrix for
-each response. Alternatively, choosing `smoothed` will return \eqn{\Theta}
+each response. Alternatively, choosing \code{"smoothed"} will return \eqn{\Theta}
 with the List containing one matrix for each degree.}
 
 \item{...}{not used.}

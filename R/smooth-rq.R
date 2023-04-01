@@ -99,9 +99,9 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
 #' Extract smoothed quantile regression model coefficients
 #'
 #' @inheritParams stats::coef
-#' @param type The option `response` means that the smoothing will be inverted,
+#' @param type The option `"response"` means that the smoothing will be inverted,
 #'   giving \eqn{\Theta H'}. This will result in a List containing one matrix for
-#'   each response. Alternatively, choosing `smoothed` will return \eqn{\Theta}
+#'   each response. Alternatively, choosing `"smoothed"` will return \eqn{\Theta}
 #'   with the List containing one matrix for each degree.
 #' @param ... not used.
 #'

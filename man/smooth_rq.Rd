@@ -28,15 +28,15 @@ be no more than the number of columns in y.}
 
 \item{intercept}{logical. should the model be estimated with intercept}
 
-\item{aheads}{Defaults to the vector `1:ncol(y)` but if the responses are
+\item{aheads}{Defaults to the vector \code{1:ncol(y)} but if the responses are
 observed at a different spacing (or appear in a different order), that
 information should be used here.}
 
-\item{...}{additional arguments passed on to [quantreg::rq]. Not all are
+\item{...}{additional arguments passed on to \link[quantreg:rq]{quantreg::rq}. Not all are
 allowed.}
 }
 \value{
-An object of class `smoothrq`
+An object of class \code{smoothrq}
 }
 \description{
 Smoothed multi-response quantile regression

@@ -7,7 +7,7 @@
 \method{predict}{smoothrq}(object, newdata, ...)
 }
 \arguments{
-\item{object}{Object of class inheriting from `smooth_rq`}
+\item{object}{Object of class inheriting from \code{smooth_rq}}
 
 \item{newdata}{A matrix or data frame in which to look for
 variables with which to predict. May NOT be omitted.}
