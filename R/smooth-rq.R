@@ -11,7 +11,7 @@
 #' @param aheads Defaults to the vector `1:ncol(y)` but if the responses are
 #'   observed at a different spacing (or appear in a different order), that
 #'   information should be used here.
-#' @param ... additional arguments passed on to `[quantreg::rq]` not all are
+#' @param ... additional arguments passed on to [quantreg::rq]. Not all are
 #'   allowed.
 #'
 #' @return An object of class `smoothrq`
@@ -23,10 +23,23 @@
 #' out <- smooth_rq(x, y, tau = c(.25, .5, .75))
 smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
                       aheads = 1:n_models, ...) {
+  arg_is_probabilities(tau)
+  arg_is_numeric(x, y)
+  arg_is_pos_int(degree)
+  arg_is_lgl(intercept)
+  arg_is_scalar(intercept, degree)
+  arg_is_numeric(aheads)
+
+
+
   n_models <- ncol(y) %||% 1L
   response_names <- colnames(y) %||% paste0("y", 1:n_models)
   y <- as.matrix(y)
   nobs <- nrow(y)
+
+  if (n_models != length(aheads)) {
+    cli::cli_abort("`length(aheads)` must be the same as the number of columns in `y`.")
+  }
 
   if (degree == n_models) {
     cli::cli_warn(

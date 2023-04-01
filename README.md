@@ -8,8 +8,12 @@
 [![R-CMD-check](https://github.com/dajmcdon/smoothqr/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/dajmcdon/smoothqr/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The goal of smoothqr is to use quantile regression to make smooth
-multi-horizon forecasts.
+This package estimates multi-reponse quantile regression in the context
+that the resulting predictions should be “smooth”. The typical use case
+would be multi-horizon time-series forecasting wherein we believe that
+the responses should vary smoothly.
+
+See the related pre-print: <https://arxiv.org/abs/2202.09723>
 
 ## Installation
 
