@@ -32,7 +32,7 @@ be no more than the number of columns in y.}
 observed at a different spacing (or appear in a different order), that
 information should be used here.}
 
-\item{...}{additional arguments passed on to `[quantreg::rq]` not all are
+\item{...}{additional arguments passed on to [quantreg::rq]. Not all are
 allowed.}
 }
 \value{
