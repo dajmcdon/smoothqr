@@ -24,15 +24,16 @@
 smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
                       aheads = 1:n_models, ...) {
   arg_is_probabilities(tau)
-  arg_is_numeric(x, y)
+
   arg_is_pos_int(degree)
   arg_is_lgl(intercept)
   arg_is_scalar(intercept, degree)
-  arg_is_numeric(aheads)
-
   n_models <- ncol(y) %||% 1L
+
+  arg_is_numeric(aheads)
   response_names <- colnames(y) %||% paste0("y", 1:n_models)
   y <- as.matrix(y)
+  arg_is_numeric(y)
   nobs <- nrow(y)
 
   if (n_models != length(aheads)) {
@@ -73,6 +74,8 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
   if (is.null(colnames(x))) colnames(x) <- original_predictors
   if (intercept) x <- cbind(Intercept = 1, x)
   colnames(H) <- paste0("degree_", 1:degree)
+  x <- as.matrix(x)
+  arg_is_numeric(x)
   Xtilde <- kronecker(H, as.matrix(x), make.dimnames = TRUE)
   Y <- drop(matrix(y, ncol = 1))
   dat <- data.frame(Y, Xtilde)

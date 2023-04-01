@@ -3,23 +3,23 @@ Package: smoothqr
 Title: Smooth Multi-period Quantile Regression
 Version: 0.1.0
 Authors@R: c(
-    person("Daniel J.", "McDonald", , "daniel@stat.ubc.ca", c("aut", "cre")),
-    person("Elena", "Tuzhilina", , "elena.tuzhilina@utoronto.ca", "aut")
-    )
-Description: This package estimates multi-reponse quantile regression in the 
-    context that the resulting predictions should be "smooth". The typical
-    use case would be multi-horizon time-series forecasting wherein we believe
-    that the responses should vary smoothly.
+    person("Daniel J.", "McDonald", , "daniel@stat.ubc.ca", role = c("aut", "cre")),
+    person("Elena", "Tuzhilina", , "elena.tuzhilina@utoronto.ca", role = "aut")
+  )
+Description: This package estimates multi-reponse quantile regression in
+    the context that the resulting predictions should be "smooth". The
+    typical use case would be multi-horizon time-series forecasting
+    wherein we believe that the responses should vary smoothly.
 License: MIT + file LICENSE
+URL: https://dajmcdon.github.io/smoothqr/
 Imports: 
     cli,
-    dplyr,
     quantreg,
     rlang
+Suggests:
+    dplyr,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.2.3
-URL: https://dajmcdon.github.io/smoothqr/
-Suggests: 
-    testthat (>= 3.0.0)
-Config/testthat/edition: 3
