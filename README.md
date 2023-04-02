@@ -39,14 +39,15 @@ X <- XY[ ,21:ncol(XY)]
 tt <- smooth_rq(X, Y, c(.2, .5, .8), aheads = 20:1)
 
 pl <- predict(tt, newdata = X[max(which(complete.cases(X))), , drop = FALSE])
-pll <- dplyr::bind_rows(lapply(pl, data.frame), .id = "ahead")
+pll <- dplyr::bind_rows(lapply(pl, tibble::as_tibble), 
+                        .id = "ahead")
 plot(x, y, pch = 16, col = "lightgrey")
 curve(sin(x), from = -2 * pi, to = 2 * pi, add = TRUE)
 abline(v = x[length(y) - 20])
 pll$x <- rev(x[length(y) - 19:0])
-lines(pll$x, pll$tau...0.5, col = 4)
-lines(pll$x, pll$tau...0.2, col = 2, lty = 2)
-lines(pll$x, pll$tau...0.8, col = 2, lty = 2)
+lines(pll$x, pll$`tau = 0.5`, col = 4)
+lines(pll$x, pll$`tau = 0.2`, col = 2, lty = 2)
+lines(pll$x, pll$`tau = 0.8`, col = 2, lty = 2)
 ```
 
 <img src="man/figures/README-example-1.png" width="100%" />

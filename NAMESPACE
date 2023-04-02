@@ -2,6 +2,9 @@
 
 S3method(coef,smoothrq)
 S3method(predict,smoothrq)
+S3method(print,smoothrq)
+S3method(print,summary.smoothrq)
+S3method(summary,smoothrq)
 export(lagmat)
 export(smooth_rq)
 importFrom(rlang,`%||%`)
