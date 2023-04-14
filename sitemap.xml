@@ -16,7 +16,7 @@
     <loc>https://dajmcdon.github.io/smoothqr/index.html</loc>
   </url>
   <url>
-    <loc>https://dajmcdon.github.io/smoothqr/reference/coef.smoothrq.html</loc>
+    <loc>https://dajmcdon.github.io/smoothqr/reference/coef.smoothqr.html</loc>
   </url>
   <url>
     <loc>https://dajmcdon.github.io/smoothqr/reference/index.html</loc>
@@ -25,9 +25,9 @@
     <loc>https://dajmcdon.github.io/smoothqr/reference/lagmat.html</loc>
   </url>
   <url>
-    <loc>https://dajmcdon.github.io/smoothqr/reference/predict.smoothrq.html</loc>
+    <loc>https://dajmcdon.github.io/smoothqr/reference/predict.smoothqr.html</loc>
   </url>
   <url>
-    <loc>https://dajmcdon.github.io/smoothqr/reference/smooth_rq.html</loc>
+    <loc>https://dajmcdon.github.io/smoothqr/reference/smooth_qr.html</loc>
   </url>
 </urlset>
