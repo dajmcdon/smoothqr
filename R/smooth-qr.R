@@ -14,14 +14,14 @@
 #' @param ... additional arguments passed on to [quantreg::rq]. Not all are
 #'   allowed.
 #'
-#' @return An object of class `smoothrq`
+#' @return An object of class `smoothqr`
 #' @export
 #' @importFrom rlang `%||%`
 #' @examples
 #' x <- matrix(rnorm(100 * 10), nrow = 100)
 #' y <- matrix(rnorm(100 * 10), nrow = 100)
-#' out <- smooth_rq(x, y, tau = c(.25, .5, .75))
-smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
+#' out <- smooth_qr(x, y, tau = c(.25, .5, .75))
+smooth_qr <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
                       aheads = 1:n_models, ...) {
   arg_is_probabilities(tau)
 
@@ -93,6 +93,6 @@ smooth_rq <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
     intercept = intercept,
     original_predictors = original_predictors,
     response_names = response_names
-  ), class = "smoothrq")
+  ), class = "smoothqr")
 }
 

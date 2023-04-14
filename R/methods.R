@@ -14,10 +14,10 @@
 #' @examples
 #' x <- matrix(rnorm(100 * 10), nrow = 100)
 #' y <- matrix(rnorm(100 * 10), nrow = 100)
-#' out <- smooth_rq(x, y, tau = c(.25, .5, .75))
+#' out <- smooth_qr(x, y, tau = c(.25, .5, .75))
 #' cc1 <- coef(out)
 #' cc2 <- coef(out, "smoothed")
-coef.smoothrq <- function(object, type = c("response", "smoothed"), ...) {
+coef.smoothqr <- function(object, type = c("response", "smoothed"), ...) {
   type <- match.arg(type)
   rlang::check_dots_empty()
   names_p <- object$original_predictors
@@ -47,7 +47,7 @@ coef.smoothrq <- function(object, type = c("response", "smoothed"), ...) {
 
 #' Make predictions from a smoothed multi-output quantile regression
 #'
-#' @param object Object of class inheriting from `smooth_rq`
+#' @param object Object of class inheriting from `smooth_qr`
 #' @param newdata A matrix or data frame in which to look for
 #'   variables with which to predict. May NOT be omitted.
 #' @param ... not used
@@ -59,9 +59,9 @@ coef.smoothrq <- function(object, type = c("response", "smoothed"), ...) {
 #' @examples
 #' x <- matrix(rnorm(100 * 10), nrow = 100)
 #' y <- matrix(rnorm(100 * 10), nrow = 100)
-#' out <- smooth_rq(x, y, tau = c(.25, .5, .75))
+#' out <- smooth_qr(x, y, tau = c(.25, .5, .75))
 #' p <- predict(out, newdata = x[1:10, ])
-predict.smoothrq <- function(object, newdata, ...) {
+predict.smoothqr <- function(object, newdata, ...) {
   rlang::check_dots_empty()
   available_predictors <- colnames(newdata) %||% paste0("x", 1:ncol(newdata))
   if (is.null(colnames(newdata))) colnames(newdata) <- available_predictors
@@ -84,9 +84,9 @@ predict.smoothrq <- function(object, newdata, ...) {
   preds_list
 }
 
-#' @method summary smoothrq
+#' @method summary smoothqr
 #' @export
-summary.smoothrq <- function(object, ...) {
+summary.smoothqr <- function(object, ...) {
   rlang::check_dots_empty()
 
   out <- structure(
@@ -100,13 +100,13 @@ summary.smoothrq <- function(object, ...) {
         .id = "response"
       )
     ),
-    class = "summary.smoothrq")
+    class = "summary.smoothqr")
   out
 }
 
-#' @method print summary.smoothrq
+#' @method print summary.smoothqr
 #' @export
-print.summary.smoothrq <- function(x, ...) {
+print.summary.smoothqr <- function(x, ...) {
   rlang::check_dots_empty()
   cat("\nCall: ", deparse(x$call), "\n", fill = TRUE)
   cat("Degree: ", x$degree, "\n")
@@ -117,9 +117,9 @@ print.summary.smoothrq <- function(x, ...) {
   cat("\n")
 }
 
-#' @method print smoothrq
+#' @method print smoothqr
 #' @export
-print.smoothrq <- function(x, ...) {
+print.smoothqr <- function(x, ...) {
   print(summary(x, ...))
 }
 

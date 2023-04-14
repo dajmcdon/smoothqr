@@ -1,7 +1,7 @@
 Type: Package
 Package: smoothqr
 Title: Smooth Multi-period Quantile Regression
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Daniel J.", "McDonald", , "daniel@stat.ubc.ca", role = c("aut", "cre")),
     person("Elena", "Tuzhilina", , "elena.tuzhilina@utoronto.ca", role = "aut")

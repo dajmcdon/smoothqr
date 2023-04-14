@@ -36,7 +36,7 @@ y <- sin(x) + rnorm(length(x), sd = .1)
 XY <- lagmat(y[1:(length(y) - 20)], c(-20:20))
 Y <- XY[ ,1:20]
 X <- XY[ ,21:ncol(XY)]
-tt <- smooth_rq(X, Y, c(.2, .5, .8), aheads = 20:1)
+tt <- smooth_qr(X, Y, c(.2, .5, .8), aheads = 20:1)
 
 pl <- predict(tt, newdata = X[max(which(complete.cases(X))), , drop = FALSE])
 pll <- dplyr::bind_rows(lapply(pl, tibble::as_tibble), 
