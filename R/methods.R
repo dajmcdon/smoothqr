@@ -65,7 +65,6 @@ predict.smoothqr <- function(object, newdata, ...) {
   rlang::check_dots_empty()
   available_predictors <- colnames(newdata) %||% paste0("x", 1:ncol(newdata))
   if (is.null(colnames(newdata))) colnames(newdata) <- available_predictors
-  newdata <- newdata[, available_predictors, drop = FALSE]
   predictor_set <- object$original_predictors %in% available_predictors
   if (!all(predictor_set)) {
     missing_predictors <- object$original_predictors[!predictor_set]
@@ -73,6 +72,7 @@ predict.smoothqr <- function(object, newdata, ...) {
       c("Some of the original predictors are not present in `newdata`.",
         i = "Missing {missing_predictors}."))
   }
+  newdata <- newdata[ ,object$original_predictors, drop = FALSE]
   if (object$intercept) newdata <- cbind(Intercept = 1, newdata)
   newdata <- as.matrix(newdata)
   cc <- coef(object, type = "response")
