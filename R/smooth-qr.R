@@ -67,7 +67,7 @@ smooth_qr <- function(x, y, tau = .5, degree = 3L, intercept = TRUE,
     cli::cli_abort(
       c("Cannot perform smooth quantile regression.",
         i = "Some predictors are nearly constant. Problematic predictors:",
-        i = "{nms}."))
+        i = "{.val {nms}}."))
   }
 
   original_predictors <- colnames(x) %||% paste0("x", 1:ncol(x))

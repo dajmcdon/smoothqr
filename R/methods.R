@@ -70,7 +70,7 @@ predict.smoothqr <- function(object, newdata, ...) {
     missing_predictors <- object$original_predictors[!predictor_set]
     cli::cli_abort(
       c("Some of the original predictors are not present in `newdata`.",
-        i = "Missing {missing_predictors}."))
+        i = "Missing {.val {missing_predictors}}."))
   }
   newdata <- newdata[ ,object$original_predictors, drop = FALSE]
   if (object$intercept) newdata <- cbind(Intercept = 1, newdata)
