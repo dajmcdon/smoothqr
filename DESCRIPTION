@@ -11,7 +11,7 @@ Description: This package estimates multi-reponse quantile regression in
     typical use case would be multi-horizon time-series forecasting
     wherein we believe that the responses should vary smoothly.
 License: MIT + file LICENSE
-URL: https://dajmcdon.github.io/smoothqr/
+URL: https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/
 Imports: 
     cli,
     dplyr,
