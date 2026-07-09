@@ -10,7 +10,6 @@
 #' x <- 1:10
 #' lagmat(x, c(-2, 0, 1, 2, 3))
 lagmat <- function(x, lags) {
-
   lags <- sort(lags)
   n <- length(x)
   k <- length(lags)
@@ -20,7 +19,9 @@ lagmat <- function(x, lags) {
   mld <- max(abs(c(0, lds)))
 
   lmat <- matrix(NA, nrow = n + mlg + mld, ncol = k)
-  for (i in seq(k)) lmat[(1 + lags[i] + mld):(n + lags[i] + mld), i] <- x
+  for (i in seq(k)) {
+    lmat[(1 + lags[i] + mld):(n + lags[i] + mld), i] <- x
+  }
   colnames(lmat) <- c(
     paste0("ahead", abs(lds)),
     paste0("lag", lgs)

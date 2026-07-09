@@ -21,7 +21,9 @@ coef.smoothqr <- function(object, type = c("response", "smoothed"), ...) {
   type <- match.arg(type)
   rlang::check_dots_empty()
   names_p <- object$original_predictors
-  if (object$intercept) names_p <- c("Intercept", names_p)
+  if (object$intercept) {
+    names_p <- c("Intercept", names_p)
+  }
   np <- length(names_p)
   nr <- length(object$response_names)
   names_d <- paste0("degree_", seq(object$degree))
@@ -35,10 +37,10 @@ coef.smoothqr <- function(object, type = c("response", "smoothed"), ...) {
     cc <- apply(cc, 3, function(x) tcrossprod(x, object$H))
     dim(cc) <- c(np, nr, nt)
     dimnames(cc) <- list(names_p, object$response_names, names_t)
-    cc <- lapply(seq(nr), function(resp) cc[ , resp, ])
+    cc <- lapply(seq(nr), function(resp) cc[, resp, ])
     names(cc) <- object$response_names
   } else {
-    cc <- lapply(seq(nd), function(deg) cc[ , deg, ])
+    cc <- lapply(seq(nd), function(deg) cc[, deg, ])
     names(cc) <- names_d
   }
   cc
@@ -64,16 +66,23 @@ coef.smoothqr <- function(object, type = c("response", "smoothed"), ...) {
 predict.smoothqr <- function(object, newdata, ...) {
   rlang::check_dots_empty()
   available_predictors <- colnames(newdata) %||% paste0("x", 1:ncol(newdata))
-  if (is.null(colnames(newdata))) colnames(newdata) <- available_predictors
+  if (is.null(colnames(newdata))) {
+    colnames(newdata) <- available_predictors
+  }
   predictor_set <- object$original_predictors %in% available_predictors
   if (!all(predictor_set)) {
     missing_predictors <- object$original_predictors[!predictor_set]
     cli::cli_abort(
-      c("Some of the original predictors are not present in `newdata`.",
-        i = "Missing {.val {missing_predictors}}."))
+      c(
+        "Some of the original predictors are not present in `newdata`.",
+        i = "Missing {.val {missing_predictors}}."
+      )
+    )
   }
-  newdata <- newdata[ ,object$original_predictors, drop = FALSE]
-  if (object$intercept) newdata <- cbind(Intercept = 1, newdata)
+  newdata <- newdata[, object$original_predictors, drop = FALSE]
+  if (object$intercept) {
+    newdata <- cbind(Intercept = 1, newdata)
+  }
   newdata <- as.matrix(newdata)
   cc <- coef(object, type = "response")
   preds_list <- lapply(cc, function(th) {
@@ -100,7 +109,8 @@ summary.smoothqr <- function(object, ...) {
         .id = "response"
       )
     ),
-    class = "summary.smoothqr")
+    class = "summary.smoothqr"
+  )
   out
 }
 
@@ -122,4 +132,3 @@ print.summary.smoothqr <- function(x, ...) {
 print.smoothqr <- function(x, ...) {
   print(summary(x, ...))
 }
-
