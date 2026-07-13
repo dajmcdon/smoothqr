@@ -22,9 +22,12 @@ lagmat <- function(x, lags) {
   for (i in seq(k)) {
     lmat[(1 + lags[i] + mld):(n + lags[i] + mld), i] <- x
   }
-  colnames(lmat) <- c(
-    paste0("ahead", abs(lds)),
-    paste0("lag", lgs)
-  )
+  ahead_names <- if (length(lds) > 0) {
+    paste0("ahead", abs(lds))
+  } else {
+    character(0)
+  }
+  lag_names <- if (length(lgs) > 0) paste0("lag", lgs) else character(0)
+  colnames(lmat) <- c(ahead_names, lag_names)
   lmat
 }
