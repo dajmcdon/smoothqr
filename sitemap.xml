@@ -1,33 +1,17 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/404.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/coef.smoothqr.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/lagmat.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/predict.smoothqr.html</loc>
-  </url>
-  <url>
-    <loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/smooth_qr.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/404.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/LICENSE-text.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/LICENSE.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/articles/index.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/articles/smoothqr.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/authors.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/index.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/news/index.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/coef.smoothqr.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/covid_case_death_rates.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/index.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/lagmat.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/predict.smoothqr.html</loc></url>
+<url><loc>https://dajmcdon.github.io/smoothqr/, https://github.com/dajmcdon/smoothqr/reference/smooth_qr.html</loc></url>
 </urlset>
+
