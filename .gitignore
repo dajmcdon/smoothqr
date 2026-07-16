@@ -3,3 +3,15 @@
 .RData
 .Ruserdata
 docs
+inst/doc
+.DS_Store
+**/.DS_Store
+/doc/
+/Meta/
+.Rprofile
+renv.lock
+renv/
+.Renviron
+.workflow/
+.plans/
+.claude/

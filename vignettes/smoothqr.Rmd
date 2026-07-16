@@ -1,0 +1,237 @@
+---
+title: "smoothqr"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{smoothqr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4.5
+)
+```
+
+```{r setup, message = FALSE}
+library(smoothqr)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(lubridate)
+```
+
+## Data
+
+This vignette demonstrates `smooth_qr()` on the `covid_case_death_rates` data
+from the [`epidatasets`](https://cmu-delphi.github.io/epidatasets/) package.
+The data contain daily COVID-19 case and death rates (per 100,000 people) for
+56 US states/territories.
+
+```{r data}
+`%nin%` <- Negate(`%in%`)
+covid_case_death_rates <- covid_case_death_rates |>
+  filter(geo_value %nin% c("as", "gu", "mp", "vi")) |>
+  select(geo_value, time_value, case_rate, death_rate)
+range(covid_case_death_rates$time_value)
+n_distinct(covid_case_death_rates$geo_value) # includes 50 states, DC, and PR
+```
+
+We'll forecast future death rates using past case and death rates as
+predictors, treating `2021-08-01` as the forecast date -- the date on which
+the forecaster is standing and producing predictions for future days.
+
+```{r forecast-date}
+forecast_date <- ymd("2021-08-01")
+```
+
+## Building features
+
+`smooth_qr()` expects a predictor matrix `x` and a response matrix `y`, where
+each column of `y` corresponds to a different forecast horizon ("ahead"). We
+use [lagmat()] to build lagged predictors (case and death rates observed 0,
+7, and 14 days before the current time) and led responses (death rates 7,
+14, 21, and 28 days ahead), separately for each location, then stack the
+results.
+
+```{r build-design}
+aheads <- 1:28 # days ahead to forecast death_rate
+lags <- c(0, 1, 2, 7, 14) # lags (days back) used as predictors
+
+# lagmat() must be called with the full set of shifts at once so that the
+# lag and lead columns stay aligned to the same set of rows.
+all_shifts <- c(-aheads, lags)
+mld <- max(aheads)
+mlg <- max(lags)
+
+build_design <- function(df) {
+  df <- df |> arrange(time_value)
+  case_full <- lagmat(df$case_rate, all_shifts)
+  death_full <- lagmat(df$death_rate, all_shifts)
+  colnames(case_full) <- paste0("case_", colnames(case_full))
+  colnames(death_full) <- paste0("death_", colnames(death_full))
+  time_padded <- c(rep(as.Date(NA), mld), df$time_value, rep(as.Date(NA), mlg))
+  bind_cols(
+    time_value = time_padded,
+    as_tibble(case_full),
+    as_tibble(death_full)
+  )
+}
+
+design <- covid_case_death_rates |>
+  as_tibble() |>
+  group_by(geo_value) |>
+  group_modify(~ build_design(.x)) |>
+  ungroup() |>
+  filter(!is.na(time_value)) |>
+  select(!starts_with("case_ahead"))
+
+design
+```
+
+## Fitting the model
+
+We fit on all data up to 30 days before the forecast date, using complete cases
+only (`smooth_qr()` drops incomplete rows automatically).
+
+```{r fit}
+train <- design |>
+  filter(between(time_value, forecast_date - 30, forecast_date))
+
+x_train <- train |> select(contains("lag")) |> as.matrix()
+y_train <- train |> select(contains("ahead")) |> as.matrix()
+
+fit <- smooth_qr(
+  x_train,
+  y_train,
+  tau = c(.1, .25, .5, .75, .9),
+  degree = 6L,
+  aheads = aheads
+)
+fit
+```
+
+### Smoothed coefficients across aheads
+
+The central idea behind `smooth_qr()` is that the predictions for
+neighbouring forecast horizons should vary smoothly, rather than being
+estimated independently. This is controlled by enforcing smoothness on the coefficients. We can see this by extracting the coefficients on
+the response scale with `coef()` and examining how a single predictor's
+coefficient evolves across aheads.
+
+```{r coef-smoothness}
+cc <- coef(fit, type = "response")
+
+coef_df <- bind_rows(
+  lapply(names(cc), function(nm) {
+    as_tibble(cc[[nm]], rownames = "predictor") |> mutate(response = nm)
+  })
+) |>
+  mutate(ahead = as.numeric(gsub("death_ahead", "", response)))
+
+coef_df |>
+  filter(predictor %in% c("case_lag0", "death_lag0")) |>
+  ggplot(aes(ahead, `tau = 0.5`, color = predictor)) +
+  geom_line() +
+  geom_point() +
+  scale_colour_manual(
+    values = c("case_lag0" = "steelblue", "death_lag0" = "darkorange")
+  ) +
+  labs(
+    x = "Forecast horizon (days ahead)",
+    y = "Coefficient (tau = 0.5)",
+    color = "Predictor"
+  )
+```
+
+## Predicting
+
+To forecast forward from `forecast_date`, we use each location's predictor
+values observed as of that date.
+
+```{r newdata}
+newdata <- design |>
+  filter(time_value == forecast_date) |>
+  select(geo_value, contains("lag"))
+
+preds <- predict(fit, newdata = newdata |> select(-geo_value))
+
+preds_tbl <- bind_rows(
+  lapply(names(preds), function(nm) {
+    as_tibble(preds[[nm]]) |>
+      mutate(geo_value = newdata$geo_value, response = nm)
+  })
+) |>
+  pivot_longer(starts_with("tau"), names_to = "tau", values_to = "value") |>
+  mutate(
+    ahead = as.numeric(gsub("death_ahead", "", response)),
+    target_date = forecast_date + ahead,
+    tau = as.numeric(gsub("tau = ", "", tau))
+  )
+
+preds_tbl
+```
+
+## Visualizing a few locations
+
+We compare the forecast distributions for California, New York, Pennsylvania,
+and Utah against the death rates that were subsequently observed.
+
+```{r plot-ca}
+geo_focus <- c("ca", "ny", "pa", "ut")
+
+actual <- covid_case_death_rates |>
+  as_tibble() |>
+  filter(
+    geo_value %in% geo_focus,
+    time_value >= forecast_date - 60,
+    time_value <= forecast_date + 35
+  )
+
+pred_wide <- preds_tbl |>
+  filter(geo_value %in% geo_focus) |>
+  pivot_wider(
+    id_cols = c(geo_value, response, ahead, target_date),
+    names_from = tau,
+    values_from = value,
+    names_prefix = "q"
+  )
+
+ggplot() +
+  geom_line(
+    data = actual |> filter(time_value <= forecast_date),
+    aes(time_value, death_rate)
+  ) +
+  geom_line(
+    data = actual |> filter(time_value > forecast_date),
+    aes(time_value, death_rate),
+    colour = "grey60"
+  ) +
+  geom_ribbon(
+    data = pred_wide,
+    aes(x = target_date, ymin = q0.1, ymax = q0.9),
+    alpha = 0.3,
+    fill = "steelblue"
+  ) +
+  geom_ribbon(
+    data = pred_wide,
+    aes(x = target_date, ymin = q0.25, ymax = q0.75),
+    alpha = 0.5,
+    fill = "steelblue"
+  ) +
+  geom_line(data = pred_wide, aes(target_date, q0.5), color = "darkorange") +
+  facet_wrap(~geo_value, scales = "free_y") +
+  geom_vline(xintercept = forecast_date, linetype = 2) +
+  labs(
+    x = "Date",
+    y = "Death rate (per 100k)"
+  ) +
+  theme_bw()
+```
+
+Note that observed death rate in California just after the forecast date shows
+a data irregularity (a brief dip below zero), which is a known reporting
+artifact in this dataset rather than a reflection of real negative deaths.
