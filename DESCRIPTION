@@ -1,7 +1,7 @@
 Type: Package
 Package: smoothqr
 Title: Smooth Multi-period Quantile Regression
-Version: 0.1.1
+Version: 1.0.0
 Authors@R: c(
     person("Daniel J.", "McDonald", , "daniel@stat.ubc.ca", role = c("aut", "cre")),
     person("Elena", "Tuzhilina", , "elena.tuzhilina@utoronto.ca", role = "aut")
@@ -14,7 +14,7 @@ License: MIT + file LICENSE
 URL: https://dajmcdon.github.io/smoothqr/,
     https://github.com/dajmcdon/smoothqr/
 BugReports: https://github.com/dajmcdon/smoothqr/issues/new
-Imports: 
+Imports:
     cli,
     dplyr,
     quantreg,
@@ -22,9 +22,16 @@ Imports:
     tibble
 Suggests:
     ggplot2,
-    testthat (>= 3.0.0)
+    knitr,
+    lubridate,
+    rmarkdown,
+    testthat (>= 3.0.0),
+    tidyr
 Config/testthat/edition: 3
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.3
+VignetteBuilder: knitr
+Depends:
+    R (>= 4.1.0)

@@ -18,7 +18,6 @@ knitr::opts_chunk$set(
 
 ```{r setup, message = FALSE}
 library(smoothqr)
-library(epidatasets)
 library(dplyr)
 library(tidyr)
 library(ggplot2)
