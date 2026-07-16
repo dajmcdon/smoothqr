@@ -37,7 +37,7 @@ test_that("lagmat works with a mix of lags and leads", {
   expect_equal(dim(out), c(15L, 5L))
   expect_identical(colnames(out), c("ahead2", "lag0", "lag1", "lag2", "lag3"))
   expect_equal(out[, "lag0"], c(NA, NA, x, NA, NA, NA))
-  expect_equal(out[, "ahead2"], c(x, NA, NA, NA, NA))
+  expect_equal(out[, "ahead2"], c(x, NA, NA, NA, NA, NA))
 })
 
 test_that("lagmat includes lag0 correctly when 0 is among the lags", {
