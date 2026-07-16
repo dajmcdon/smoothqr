@@ -155,7 +155,7 @@ values observed as of that date.
 ```{r newdata}
 newdata <- design |>
   filter(time_value == forecast_date) |>
-  select(geo_value, all_of(predictor_cols))
+  select(geo_value, contains("lag"))
 
 preds <- predict(fit, newdata = newdata |> select(-geo_value))
 
